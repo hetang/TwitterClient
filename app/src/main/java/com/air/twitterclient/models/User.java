@@ -19,7 +19,7 @@ public class User implements Parcelable {
 
     // Parcelling part
     public User(Parcel in){
-        String[] data = new String[3];
+        String[] data = new String[4];
 
         in.readStringArray(data);
         this.uid = Long.parseLong(data[0]);
@@ -51,6 +51,9 @@ public class User implements Parcelable {
             user.uid = jsonObject.getLong("id");
             user.screenName = jsonObject.getString("screen_name");
             user.profileImageURL = jsonObject.getString("profile_image_url");
+            if(user.profileImageURL == null || "".equals(user.profileImageURL)) {
+                user.profileImageURL = jsonObject.getString("profile_image_url");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

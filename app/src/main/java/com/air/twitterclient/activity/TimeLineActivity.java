@@ -1,5 +1,6 @@
 package com.air.twitterclient.activity;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.air.twitterclient.R;
 import com.air.twitterclient.adaptor.TweetArrayAdaptor;
 import com.air.twitterclient.helpers.TweetHelper;
+import com.air.twitterclient.listners.EndlessScrollListener;
 import com.air.twitterclient.models.Tweet;
 import com.air.twitterclient.models.User;
 import com.air.twitterclient.rest.TwitterApplication;
@@ -22,6 +24,7 @@ import com.air.twitterclient.rest.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -35,6 +38,8 @@ public class TimeLineActivity extends ActionBarActivity {
     private TweetHelper helper;
     private TextView mTitle;
     private User user;
+
+    private final int REQUEST_CODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,7 @@ public class TimeLineActivity extends ActionBarActivity {
                 Log.e("Error in User Info", errorResponse.toString(), throwable);
             }
         });
-        //lvTweetList.setOnScrollListener(new EndlessScrollListener(helper));
+        lvTweetList.setOnScrollListener(new EndlessScrollListener(helper));
 
         Typeface fontJamesFajardo = Typeface.createFromAsset(this.getAssets(), "fonts/JamesFajardo.ttf");
 
@@ -86,12 +91,28 @@ public class TimeLineActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.muCompose:
-                Toast.makeText(this, "Compose Click", Toast.LENGTH_SHORT).show();
-
+                //Toast.makeText(this, "Compose Click", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(this, ComposeActivity.class);
+                i.putExtra("userInfo", user);
+                startActivityForResult(i, REQUEST_CODE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            String response = data.getExtras().getString("response");
+            try {
+                Tweet tweet = Tweet.fromJSON(new JSONObject(response));
+                tweets.add(0,tweet);
+                adaptor.notifyDataSetChanged();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

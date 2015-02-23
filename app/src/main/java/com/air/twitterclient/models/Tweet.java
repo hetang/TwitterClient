@@ -110,7 +110,7 @@ public class Tweet {
         return createdAt;
     }
 
-    private static Tweet fromJSON(JSONObject jsonObject) {
+    public static Tweet fromJSON(JSONObject jsonObject) {
         Tweet tweet = new Tweet();
         try {
             tweet.body = jsonObject.getString("text");

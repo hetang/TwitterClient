@@ -9,6 +9,7 @@ import android.content.Context;
 import com.air.twitterclient.handler.TweetJSONResponseHandler;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /*
@@ -64,5 +65,12 @@ public class TwitterClient extends OAuthBaseClient {
         RequestParams param = new RequestParams();
         getClient().get(apiURL, param,handler);
 
+    }
+
+    public void postTweet(String body, JsonHttpResponseHandler handler) {
+        String apiURL = getApiUrl("/statuses/update.json");
+        RequestParams param = new RequestParams();
+        param.put("status", body);
+        getClient().post(apiURL, param,handler);
     }
 }

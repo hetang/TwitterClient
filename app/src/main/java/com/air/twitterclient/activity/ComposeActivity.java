@@ -1,18 +1,62 @@
 package com.air.twitterclient.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.air.twitterclient.R;
+import com.air.twitterclient.models.User;
+import com.air.twitterclient.rest.TwitterApplication;
+import com.air.twitterclient.rest.TwitterClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
 
 public class ComposeActivity extends ActionBarActivity {
+    private User user;
+    private TwitterClient client;
+
+    private ImageView ivUserProfileImg;
+    private TextView txtName;
+    private TextView txtScreenName;
+    private TextView mTitle;
+    private EditText edTxtTweet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
+        client = TwitterApplication.getRestClient();
+
+        user = (User) getIntent().getParcelableExtra("userInfo");
+        ivUserProfileImg = (ImageView) findViewById(R.id.ivUserProfileImg);
+        txtName = (TextView) findViewById(R.id.txtName);
+        txtScreenName = (TextView) findViewById(R.id.txtScreenName);
+        edTxtTweet = (EditText) findViewById(R.id.edTxtTweet);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tolBrCompose);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mTitle = (TextView) toolbar.findViewById(R.id.toolbar_compose_title);
+
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setLogo(R.drawable.ic_tweets);
+        mTitle.setText("");
+        txtName.setText(user.getName());
+        txtScreenName.setText("@" + user.getScreenName());
+        Picasso.with(this).load(user.getProfileImageURL()).fit().placeholder(R.drawable.ic_loading).into(ivUserProfileImg);
     }
 
 
@@ -25,16 +69,30 @@ public class ComposeActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.muCompose:
+                final ComposeActivity context = this;
+                //Toast.makeText(this, "Tweet Click", Toast.LENGTH_SHORT).show();
+                client.postTweet(edTxtTweet.getText().toString(), new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        Log.d("Tweet Post Response", response.toString());
+                        Intent data = new Intent();
+                        data.putExtra("response", response.toString());
+                        context.setResult(RESULT_OK, data);
+                        context.finish();
+                    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Log.e("Error in User Info", errorResponse.toString(), throwable);
+                    }
+                });
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
