@@ -9,6 +9,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,6 +54,14 @@ public class ComposeActivity extends ActionBarActivity {
 
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setLogo(R.drawable.ic_tweets);
+        final ComposeActivity context = this;
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.finish();
+            }
+        });
+
         mTitle.setText("");
         txtName.setText(user.getName());
         txtScreenName.setText("@" + user.getScreenName());
