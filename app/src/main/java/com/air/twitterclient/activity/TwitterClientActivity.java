@@ -1,9 +1,11 @@
-package com.air.twitterclient;
+package com.air.twitterclient.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.air.twitterclient.R;
 
 
 public class TwitterClientActivity extends ActionBarActivity {

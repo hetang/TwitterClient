@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.air.twitterclient.activity.TimeLineActivity">
+    <item
+        android:orderInCategory="2"
+        android:id="@+id/muCompose"
+        android:icon="@drawable/ic_cmp"
+        app:showAsAction="ifRoom"
+        android:title="@string/compose_tweet">
+    </item>
+</menu>
