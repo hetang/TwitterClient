@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,7 @@ public class TimeLineActivity extends ActionBarActivity {
     private TweetHelper helper;
     private TextView mTitle;
     private User user;
-
+    ProgressBar pb;
     private final int REQUEST_CODE = 20;
 
     @Override
@@ -46,13 +47,15 @@ public class TimeLineActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_line);
 
+        pb = (ProgressBar) findViewById(R.id.pbTweetsLoading);
+
         tweets = new ArrayList<Tweet>();
         lvTweetList = (ListView) findViewById(R.id.lvTimeLine);
         adaptor = new TweetArrayAdaptor(this, tweets);
         lvTweetList.setAdapter(adaptor);
 
         client = TwitterApplication.getRestClient();
-        helper = new TweetHelper(client,adaptor,lvTweetList, mTitle);
+        helper = new TweetHelper(this,client,adaptor,lvTweetList, mTitle, pb);
         helper.populateTimeLine();
         client.getLoggedInUserInfo(new JsonHttpResponseHandler() {
             @Override
@@ -114,5 +117,15 @@ public class TimeLineActivity extends ActionBarActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    // Should be called manually when an async task has started
+    public void showProgressBar() {
+        setProgressBarIndeterminateVisibility(true);
+    }
+
+    // Should be called when an async task has finished
+    public void hideProgressBar() {
+        setProgressBarIndeterminateVisibility(false);
     }
 }
