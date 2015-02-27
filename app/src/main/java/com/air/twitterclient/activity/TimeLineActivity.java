@@ -3,6 +3,7 @@ package com.air.twitterclient.activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.air.twitterclient.R;
 import com.air.twitterclient.adaptor.TweetArrayAdaptor;
+import com.air.twitterclient.fragments.TweetListFragment;
 import com.air.twitterclient.helpers.TweetHelper;
 import com.air.twitterclient.listners.EndlessScrollListener;
 import com.air.twitterclient.models.Tweet;
@@ -33,13 +35,11 @@ import java.util.List;
 
 public class TimeLineActivity extends ActionBarActivity {
     private TwitterClient client;
-    private List<Tweet> tweets;
-    private TweetArrayAdaptor adaptor;
-    private ListView lvTweetList;
-    private TweetHelper helper;
     private TextView mTitle;
     private User user;
-    ProgressBar pb;
+    private TweetHelper helper;
+    private TweetListFragment fragment;
+
     private final int REQUEST_CODE = 20;
 
     @Override
@@ -47,15 +47,12 @@ public class TimeLineActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_line);
 
-        pb = (ProgressBar) findViewById(R.id.pbTweetsLoading);
-
-        tweets = new ArrayList<Tweet>();
-        lvTweetList = (ListView) findViewById(R.id.lvTimeLine);
-        adaptor = new TweetArrayAdaptor(this, tweets);
-        lvTweetList.setAdapter(adaptor);
+        fragment = (TweetListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
 
         client = TwitterApplication.getRestClient();
-        helper = new TweetHelper(this,client,adaptor,lvTweetList, mTitle, pb);
+        helper = new TweetHelper();
+        helper.setClient(client);
+        fragment.setupHelper(helper);
         helper.populateTimeLine();
         client.getLoggedInUserInfo(new JsonHttpResponseHandler() {
             @Override
@@ -70,7 +67,7 @@ public class TimeLineActivity extends ActionBarActivity {
                 Log.e("Error in User Info", errorResponse.toString(), throwable);
             }
         });
-        lvTweetList.setOnScrollListener(new EndlessScrollListener(helper));
+
 
         Typeface fontJamesFajardo = Typeface.createFromAsset(this.getAssets(), "fonts/JamesFajardo.ttf");
 
@@ -81,6 +78,7 @@ public class TimeLineActivity extends ActionBarActivity {
 
         toolbar.setLogo(R.drawable.ic_tweets);
         mTitle.setTypeface(fontJamesFajardo);
+
     }
 
     @Override
@@ -111,21 +109,10 @@ public class TimeLineActivity extends ActionBarActivity {
             String response = data.getExtras().getString("response");
             try {
                 Tweet tweet = Tweet.fromJSON(new JSONObject(response));
-                tweets.add(0,tweet);
-                adaptor.notifyDataSetChanged();
+                fragment.addUserComposeTweet(tweet);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    // Should be called manually when an async task has started
-    public void showProgressBar() {
-        setProgressBarIndeterminateVisibility(true);
-    }
-
-    // Should be called when an async task has finished
-    public void hideProgressBar() {
-        setProgressBarIndeterminateVisibility(false);
     }
 }

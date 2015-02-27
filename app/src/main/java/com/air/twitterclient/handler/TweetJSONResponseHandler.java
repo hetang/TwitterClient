@@ -1,5 +1,6 @@
 package com.air.twitterclient.handler;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,25 +20,23 @@ import java.util.List;
  * Created by hetang on 2/22/15.
  */
 public class TweetJSONResponseHandler extends JsonHttpResponseHandler {
+    private SwipeRefreshLayout swipeContainer;
     private TweetArrayAdaptor adaptor;
-    private TextView mTitle;
-    private TimeLineActivity timeLineActivity;
     private ProgressBar pb;
 
-    public TweetJSONResponseHandler(TweetArrayAdaptor adaptor, TextView mTitle, TimeLineActivity timeLineActivity, ProgressBar pb) {
+    public TweetJSONResponseHandler(TweetArrayAdaptor adaptor, ProgressBar pb, SwipeRefreshLayout swipeContainer) {
         this.adaptor = adaptor;
-        this.mTitle = mTitle;
-        this.timeLineActivity = timeLineActivity;
         this.pb = pb;
+        this.swipeContainer = swipeContainer;
     }
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+        if(swipeContainer != null) {
+            swipeContainer.setRefreshing(false);
+        }
         if(pb != null) {
             pb.setVisibility(ProgressBar.INVISIBLE);
-        }
-        if(timeLineActivity != null) {
-            timeLineActivity.hideProgressBar();
         }
         List<Tweet> tweets = Tweet.fromJSONArray(response);
         adaptor.addAll(tweets);
