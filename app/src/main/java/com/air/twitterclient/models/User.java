@@ -84,12 +84,12 @@ public class User implements Parcelable {
             user.uid = jsonObject.getLong("id");
             user.screenName = jsonObject.getString("screen_name");
             user.profileImageURL = jsonObject.getString("profile_image_url");
-            if(user.profileImageURL == null || "".equals(user.profileImageURL)) {
-                user.profileImageURL = jsonObject.getString("profile_image_url");
-            }
-            if(jsonObject.getBoolean("profile_use_background_image")) {
+
+            user.profileBackgroundURL = jsonObject.getString("profile_banner_url");
+            if(user.profileBackgroundURL == null || "".equals(user.profileBackgroundURL) || "null".equals(user.profileBackgroundURL)) {
                 user.profileBackgroundURL = jsonObject.getString("profile_background_image_url");
             }
+
             user.tagLine = jsonObject.getString("description");
             user.followersCount = jsonObject.getInt("followers_count");
             user.followingCount = jsonObject.getInt("friends_count");
