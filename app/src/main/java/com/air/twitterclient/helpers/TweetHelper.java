@@ -2,6 +2,7 @@ package com.air.twitterclient.helpers;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -10,7 +11,12 @@ import com.air.twitterclient.activity.TimeLineActivity;
 import com.air.twitterclient.adaptor.TweetArrayAdaptor;
 import com.air.twitterclient.handler.TweetJSONResponseHandler;
 import com.air.twitterclient.models.Tweet;
+import com.air.twitterclient.models.User;
 import com.air.twitterclient.rest.TwitterClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,7 +29,6 @@ public class TweetHelper {
     private SwipeRefreshLayout swipeContainer;
     private TwitterClient client;
     private TweetArrayAdaptor adaptor;
-    private ListView lvTweetList;
     private ProgressBar pb;
 
     public static String getRelativeTimeAgo(String rawJsonDate) {
@@ -44,19 +49,57 @@ public class TweetHelper {
 
     public TweetHelper() {}
 
-    public TweetHelper(TwitterClient client, TweetArrayAdaptor adaptor, ListView lvTweetList, ProgressBar pb, SwipeRefreshLayout swipeContainer) {
+    public TweetHelper(TwitterClient client, TweetArrayAdaptor adaptor, ProgressBar pb, SwipeRefreshLayout swipeContainer) {
         this.client = client;
         this.adaptor = adaptor;
-        this.lvTweetList = lvTweetList;
         this.pb = pb;
         this.swipeContainer = swipeContainer;
+    }
+
+    public void setSwipeContainer(SwipeRefreshLayout swipeContainer) {
+        this.swipeContainer = swipeContainer;
+    }
+
+    public void setClient(TwitterClient client) {
+        this.client = client;
+    }
+
+    public void setAdaptor(TweetArrayAdaptor adaptor) {
+        this.adaptor = adaptor;
+    }
+
+    public void setPb(ProgressBar pb) {
+        this.pb = pb;
     }
 
     public void populateTimeLine() {
         if(pb != null) {
             pb.setVisibility(ProgressBar.VISIBLE);
         }
+        if(adaptor != null) {
+            adaptor.clear();
+        }
         client.getHomeTimeLine(new TweetJSONResponseHandler(adaptor, pb, swipeContainer));
+    }
+
+    public void populateMentionsTimeLine() {
+        if(pb != null) {
+            pb.setVisibility(ProgressBar.VISIBLE);
+        }
+        if(adaptor != null) {
+            adaptor.clear();
+        }
+        client.getMentionTimeLine(new TweetJSONResponseHandler(adaptor, pb, swipeContainer));
+    }
+
+    public void getUserTimeLines(String screenName) {
+        if(pb != null) {
+            pb.setVisibility(ProgressBar.VISIBLE);
+        }
+        if(adaptor != null) {
+            adaptor.clear();
+        }
+        client.getUserTimeLine(screenName, new TweetJSONResponseHandler(adaptor, pb, swipeContainer));
     }
 
     public void fetchNext(int totalItemCount) {
@@ -64,43 +107,13 @@ public class TweetHelper {
         client.fetchNextTweet(tweet.getUid(), new TweetJSONResponseHandler(adaptor, null, null));
     }
 
-    public SwipeRefreshLayout getSwipeContainer() {
-        return swipeContainer;
+    public void fetchNextMentionsTweets(int totalItemCount) {
+        Tweet tweet = adaptor.getItem(totalItemCount-1);
+        client.fetchNextMentionsTweet(tweet.getUid(), new TweetJSONResponseHandler(adaptor, null, null));
     }
 
-    public void setSwipeContainer(SwipeRefreshLayout swipeContainer) {
-        this.swipeContainer = swipeContainer;
-    }
-
-    public TwitterClient getClient() {
-        return client;
-    }
-
-    public void setClient(TwitterClient client) {
-        this.client = client;
-    }
-
-    public TweetArrayAdaptor getAdaptor() {
-        return adaptor;
-    }
-
-    public void setAdaptor(TweetArrayAdaptor adaptor) {
-        this.adaptor = adaptor;
-    }
-
-    public ListView getLvTweetList() {
-        return lvTweetList;
-    }
-
-    public void setLvTweetList(ListView lvTweetList) {
-        this.lvTweetList = lvTweetList;
-    }
-
-    public ProgressBar getPb() {
-        return pb;
-    }
-
-    public void setPb(ProgressBar pb) {
-        this.pb = pb;
+    public void fetchNextUserTimeLines(int totalItemCount) {
+        Tweet tweet = adaptor.getItem(totalItemCount-1);
+        client.fetchNextUserTimeLineTweet(tweet.getUid(), new TweetJSONResponseHandler(adaptor, null, null));
     }
 }

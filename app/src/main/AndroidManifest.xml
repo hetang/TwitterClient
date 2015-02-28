@@ -52,6 +52,10 @@
             android:name=".activity.ComposeActivity"
             android:label="@string/title_activity_compose" >
         </activity>
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
     </application>
 
 </manifest>

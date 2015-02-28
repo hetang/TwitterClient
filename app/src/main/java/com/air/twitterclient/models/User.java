@@ -10,22 +10,33 @@ import org.json.JSONObject;
  * Created by hetang on 2/22/15.
  */
 public class User implements Parcelable {
-    private String name;
+
     private long uid;
+
+    private String name;
     private String screenName;
     private String profileImageURL;
+    private String profileBackgroundURL;
+    private String tagLine;
 
-    public User() {}
+    private int tweetCount;
+    private int followingCount;
+    private int followersCount;
 
-    // Parcelling part
-    public User(Parcel in){
-        String[] data = new String[4];
+    public String getTagLine() {
+        return tagLine;
+    }
 
-        in.readStringArray(data);
-        this.uid = Long.parseLong(data[0]);
-        this.name = data[1];
-        this.screenName = data[2];
-        this.profileImageURL = data[3];
+    public int getTweetCount() {
+        return tweetCount;
+    }
+
+    public int getFollowingCount() {
+        return followingCount;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
     }
 
     public String getName() {
@@ -44,6 +55,28 @@ public class User implements Parcelable {
         return profileImageURL;
     }
 
+    public String getProfileBackgroundURL() {
+        return profileBackgroundURL;
+    }
+
+    public User() {}
+
+    // Parcelling part
+    public User(Parcel in){
+        String[] data = new String[9];
+
+        in.readStringArray(data);
+        this.uid = Long.parseLong(data[0]);
+        this.name = data[1];
+        this.screenName = data[2];
+        this.profileImageURL = data[3];
+        this.profileBackgroundURL = data[4];
+        this.tagLine = data[5];
+        this.tweetCount = Integer.parseInt(data[6]);
+        this.followersCount = Integer.parseInt(data[7]);
+        this.followingCount = Integer.parseInt(data[8]);
+    }
+
     public static User fromJSON(JSONObject jsonObject) {
         User user = new User();
         try {
@@ -54,6 +87,13 @@ public class User implements Parcelable {
             if(user.profileImageURL == null || "".equals(user.profileImageURL)) {
                 user.profileImageURL = jsonObject.getString("profile_image_url");
             }
+            if(jsonObject.getBoolean("profile_use_background_image")) {
+                user.profileBackgroundURL = jsonObject.getString("profile_background_image_url");
+            }
+            user.tagLine = jsonObject.getString("description");
+            user.followersCount = jsonObject.getInt("followers_count");
+            user.followingCount = jsonObject.getInt("friends_count");
+            user.tweetCount = jsonObject.getInt("statuses_count");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -67,10 +107,17 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[] {String.valueOf(this.uid),
+        dest.writeStringArray(new String[] {
+                String.valueOf(this.uid),
                 this.name,
                 this.screenName,
-                this.profileImageURL});
+                this.profileImageURL,
+                this.profileBackgroundURL,
+                this.tagLine,
+                String.valueOf(this.tweetCount),
+                String.valueOf(this.followersCount),
+                String.valueOf(this.followingCount)
+        });
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

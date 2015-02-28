@@ -1,9 +1,12 @@
 package com.air.twitterclient.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.air.twitterclient.R;
@@ -11,11 +14,21 @@ import com.air.twitterclient.rest.TwitterClient;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
+    private TextView mTitle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+        Typeface fontJamesFajardo = Typeface.createFromAsset(this.getAssets(), "fonts/JamesFajardo.ttf");
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tolBrLogin);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mTitle = (TextView) toolbar.findViewById(R.id.toolbar_login_title);
+
+        toolbar.setLogo(R.drawable.ic_tweets);
+        mTitle.setTypeface(fontJamesFajardo);
 	}
 
 

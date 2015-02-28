@@ -71,6 +71,48 @@ public class TwitterClient extends OAuthBaseClient {
         String apiURL = getApiUrl("/statuses/update.json");
         RequestParams param = new RequestParams();
         param.put("status", body);
-        getClient().post(apiURL, param,handler);
+        getClient().post(apiURL, param, handler);
+    }
+
+    public void getMentionTimeLine(TweetJSONResponseHandler handler) {
+        String apiURL = getApiUrl("/statuses/mentions_timeline.json");
+        RequestParams param = new RequestParams();
+        param.put("count", 25);
+        param.put("since_id", 1);
+        getClient().get(apiURL, param, handler);
+    }
+
+    public void fetchNextMentionsTweet(long uid, AsyncHttpResponseHandler handler) {
+        String apiURL = getApiUrl("/statuses/mentions_timeline.json");
+        RequestParams param = new RequestParams();
+        param.put("count", 25);
+        param.put("max_id", uid);
+        getClient().get(apiURL, param,handler);
+    }
+
+    public void getUserTimeLine(String screenName, AsyncHttpResponseHandler handler) {
+        String apiURL = getApiUrl("/statuses/user_timeline.json");
+        RequestParams param = new RequestParams();
+        param.put("count", 25);
+        param.put("since_id", 1);
+        if(screenName != null && !"".equals(screenName)) {
+            param.put("screen_name",screenName);
+        }
+        getClient().get(apiURL, param,handler);
+    }
+
+    public void fetchNextUserTimeLineTweet(long uid, AsyncHttpResponseHandler handler) {
+        String apiURL = getApiUrl("/statuses/user_timeline.json");
+        RequestParams param = new RequestParams();
+        param.put("count", 25);
+        param.put("max_id", uid);
+        getClient().get(apiURL, param,handler);
+    }
+
+    public void getUserDetails(String screenName, AsyncHttpResponseHandler handler) {
+        String apiURL = getApiUrl("/users/lookup.json");
+        RequestParams param = new RequestParams();
+        param.put("screen_name",screenName);
+        getClient().get(apiURL, param,handler);
     }
 }

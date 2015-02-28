@@ -8,11 +8,11 @@ import com.air.twitterclient.helpers.TweetHelper;
 /**
  * Created by hetashah on 2/13/15.
  */
-public class EndlessScrollListener implements OnScrollListener {
+public class EndlessUserTimeLineTweetScrollListener implements OnScrollListener {
     private TweetHelper helper;
     // The minimum amount of items to have below your current scroll position
     // before loading more.
-    private int visibleThreshold = 20;
+    private int visibleThreshold = 2;
     // The current offset index of data you have loaded
     private int currentPage = 0;
     // The total number of items in the dataset after the last load
@@ -22,15 +22,15 @@ public class EndlessScrollListener implements OnScrollListener {
     // Sets the starting page index
     private int startingPageIndex = 0;
 
-    public EndlessScrollListener(TweetHelper helper) {
+    public EndlessUserTimeLineTweetScrollListener(TweetHelper helper) {
         this.helper = helper;
     }
 
-    public EndlessScrollListener(int visibleThreshold) {
+    public EndlessUserTimeLineTweetScrollListener(int visibleThreshold) {
         this.visibleThreshold = visibleThreshold;
     }
 
-    public EndlessScrollListener(int visibleThreshold, int startPage) {
+    public EndlessUserTimeLineTweetScrollListener(int visibleThreshold, int startPage) {
         this.visibleThreshold = visibleThreshold;
         this.startingPageIndex = startPage;
         this.currentPage = startPage;
@@ -69,7 +69,7 @@ public class EndlessScrollListener implements OnScrollListener {
 
     // Defines the process for actually loading more data based on page
     public void onLoadMore(int page, int totalItemsCount) {
-        helper.fetchNext(totalItemsCount);
+        helper.fetchNextUserTimeLines(totalItemsCount);
     }
 
     @Override

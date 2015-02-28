@@ -1,0 +1,202 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.air.twitterclient.activity.ProfileActivity"
+    android:background="#ECECEC">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tolBrProfile"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#29A5D8">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:gravity="center_vertical"
+            android:textColor="#E6E6E8"
+            android:textSize="46sp"
+            android:textStyle="bold"
+            android:layout_gravity="left"
+            android:id="@+id/toolbar_profile_title" />
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/rlUserHeader"
+        android:layout_below="@+id/tolBrProfile">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="130dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/rlUserProfile">
+
+            <ImageView
+                style="@style/BackGroundImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivUserProfileBGImg"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivUserProfileImg"
+                android:minWidth="75dp"
+                android:minHeight="75dp"
+                android:maxWidth="75dp"
+                android:maxHeight="75dp"
+                android:layout_centerVertical="true"
+                android:layout_alignLeft="@+id/ivUserProfileBGImg"
+                android:layout_alignStart="@+id/ivUserProfileBGImg"
+                android:layout_marginLeft="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bill"
+                android:id="@+id/txtUserScreenName"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#ff550416"
+                android:layout_toRightOf="@+id/ivUserProfileImg"
+                android:paddingLeft="20dp"
+                android:layout_alignTop="@+id/ivUserProfileImg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tweets From..."
+                android:id="@+id/txtUserTagLine"
+                android:gravity="center_vertical|left"
+                android:textAlignment="gravity"
+                android:textSize="14sp"
+                android:textColor="#ff1b1350"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:paddingLeft="20dp"
+                android:layout_below="@+id/txtUserScreenName"
+                android:layout_toRightOf="@+id/ivUserProfileImg"/>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="70dp"
+            android:layout_below="@+id/rlUserProfile"
+            android:padding="10dp"
+            android:background="@drawable/border_bottom">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/ivUserTweetCount"
+                android:layout_weight=".34"
+                android:background="@drawable/border_layout">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/txtTweetCount"
+                    android:gravity="center_vertical|left"
+                    android:textAlignment="gravity"
+                    android:textSize="20sp"
+                    android:textColor="#ff1b1350"
+                    android:autoLink="all"
+                    android:linksClickable="true"
+                    android:minHeight="20dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TWEETS"
+                    android:id="@+id/txtTweetCountLabel"
+                    android:gravity="center_vertical|left"
+                    android:textAlignment="gravity"
+                    android:textSize="14sp"
+                    android:textColor="#ff1b1350"
+                    android:layout_below="@+id/txtTweetCount"
+                    android:layout_alignParentBottom="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/ivUserTweetCount"
+                android:layout_weight=".28"
+                android:background="@drawable/border_layout"
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/txtFollowingCount"
+                    android:gravity="center_vertical|left"
+                    android:textAlignment="gravity"
+                    android:textSize="20sp"
+                    android:textColor="#ff1b1350"
+                    android:autoLink="all"
+                    android:linksClickable="true"
+                    android:minHeight="20dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="FOLLOWING"
+                    android:id="@+id/txtFollowingCountLabel"
+                    android:gravity="center_vertical|left"
+                    android:textAlignment="gravity"
+                    android:textSize="14sp"
+                    android:textColor="#ff1b1350"
+                    android:layout_below="@+id/txtFollowingCount"
+                    android:layout_alignParentBottom="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/ivUserTweetCount"
+                android:layout_weight=".30"
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/txtFollowersCount"
+                    android:gravity="center_vertical|left"
+                    android:textAlignment="gravity"
+                    android:textSize="20sp"
+                    android:textColor="#ff1b1350"
+                    android:autoLink="all"
+                    android:linksClickable="true"
+                    android:minHeight="20dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="FOLLOWERS"
+                    android:id="@+id/txtFollowersLabel"
+                    android:gravity="center_vertical|left"
+                    android:textAlignment="gravity"
+                    android:textSize="14sp"
+                    android:textColor="#ff1b1350"
+                    android:layout_below="@+id/txtFollowersCount"
+                    android:layout_alignParentBottom="true" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/rlUserHeader"
+        android:id="@+id/rlUserLayout"></FrameLayout>
+</RelativeLayout>

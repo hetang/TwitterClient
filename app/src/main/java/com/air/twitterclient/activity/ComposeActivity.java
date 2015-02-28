@@ -52,7 +52,7 @@ public class ComposeActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mTitle = (TextView) toolbar.findViewById(R.id.toolbar_compose_title);
 
-        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setNavigationIcon(R.drawable.ic_back_white);
         toolbar.setLogo(R.drawable.ic_tweets);
         final ComposeActivity context = this;
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

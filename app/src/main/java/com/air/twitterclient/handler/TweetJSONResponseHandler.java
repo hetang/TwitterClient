@@ -45,6 +45,8 @@ public class TweetJSONResponseHandler extends JsonHttpResponseHandler {
 
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-        Log.e("API Fail", errorResponse.toString(), throwable);
+        if(errorResponse != null) {
+            Log.e("API Fail", errorResponse.toString(), throwable);
+        }
     }
 }
