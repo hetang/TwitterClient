@@ -47,40 +47,41 @@ public class ProfileActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         setupView();
-        user = (User) getIntent().getParcelableExtra("userInfo");
-        if(user == null) {
-            String screenName = (String) getIntent().getStringExtra("screen_name");
-            client = TwitterApplication.getRestClient();
-            client.getUserDetails(screenName, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    Log.d("User Info", response.toString());
-                    user = User.fromJSON(response);
-                    populateHeader(user);
-                }
+        if(savedInstanceState == null) {
+            user = (User) getIntent().getParcelableExtra("userInfo");
+            if (user == null) {
+                String screenName = (String) getIntent().getStringExtra("screen_name");
+                client = TwitterApplication.getRestClient();
+                client.getUserDetails(screenName, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        Log.d("User Info", response.toString());
+                        user = User.fromJSON(response);
+                        populateHeader(user);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    Log.d("User Info", response.toString());
-                    if(response.length() > 0) {
-                        try {
-                            user = User.fromJSON(response.getJSONObject(0));
-                            populateHeader(user);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        Log.d("User Info", response.toString());
+                        if (response.length() > 0) {
+                            try {
+                                user = User.fromJSON(response.getJSONObject(0));
+                                populateHeader(user);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
-                }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Log.e("Error in User Info", errorResponse.toString(), throwable);
-                }
-            });
-        } else {
-            populateHeader(user);
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Log.e("Error in User Info", errorResponse.toString(), throwable);
+                    }
+                });
+            } else {
+                populateHeader(user);
+            }
         }
-
     }
     private void setupView() {
         ivUserProfileImg = (ImageView) findViewById(R.id.ivUserProfileImg);
