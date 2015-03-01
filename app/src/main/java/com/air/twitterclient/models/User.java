@@ -3,7 +3,6 @@ package com.air.twitterclient.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -79,24 +78,20 @@ public class User implements Parcelable {
 
     public static User fromJSON(JSONObject jsonObject) {
         User user = new User();
-        try {
-            user.name = jsonObject.getString("name");
-            user.uid = jsonObject.getLong("id");
-            user.screenName = jsonObject.getString("screen_name");
-            user.profileImageURL = jsonObject.getString("profile_image_url");
+        user.name = jsonObject.optString("name");
+        user.uid = jsonObject.optLong("id", 0);
+        user.screenName = jsonObject.optString("screen_name");
+        user.profileImageURL = jsonObject.optString("profile_image_url");
 
-            user.profileBackgroundURL = jsonObject.getString("profile_banner_url");
-            if(user.profileBackgroundURL == null || "".equals(user.profileBackgroundURL) || "null".equals(user.profileBackgroundURL)) {
-                user.profileBackgroundURL = jsonObject.getString("profile_background_image_url");
-            }
-
-            user.tagLine = jsonObject.getString("description");
-            user.followersCount = jsonObject.getInt("followers_count");
-            user.followingCount = jsonObject.getInt("friends_count");
-            user.tweetCount = jsonObject.getInt("statuses_count");
-        } catch (JSONException e) {
-            e.printStackTrace();
+        user.profileBackgroundURL = jsonObject.optString("profile_banner_url");
+        if(user.profileBackgroundURL == null || "".equals(user.profileBackgroundURL) || "null".equals(user.profileBackgroundURL)) {
+            user.profileBackgroundURL = jsonObject.optString("profile_background_image_url");
         }
+
+        user.tagLine = jsonObject.optString("description");
+        user.followersCount = jsonObject.optInt("followers_count", 0);
+        user.followingCount = jsonObject.optInt("friends_count", 0);
+        user.tweetCount = jsonObject.optInt("statuses_count", 0);
         return user;
     }
 

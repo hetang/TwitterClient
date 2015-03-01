@@ -1,15 +1,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.air.twitterclient.activity.ProfileActivity"
-    android:background="#ECECEC">
-
+    tools:context="com.air.twitterclient.activity.SearchTimeLineActivity">
     <android.support.v7.widget.Toolbar
-        android:id="@+id/tolBrProfile"
+        android:id="@+id/tolBrSearch"
         android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#29A5D8">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,20 +18,16 @@
             android:textSize="46sp"
             android:textStyle="bold"
             android:layout_gravity="left"
-            android:id="@+id/toolbar_profile_title" />
+            android:id="@+id/toolbar_search_title" />
     </android.support.v7.widget.Toolbar>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:id="@+id/rlUserHeader"
-        android:layout_below="@+id/tolBrProfile"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"></FrameLayout>
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:id="@+id/rlSearchTimeLine"
+        android:layout_below="@+id/tolBrSearch"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/rlUserHeader"
-        android:id="@+id/rlUserLayout"></FrameLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"></FrameLayout>
 </RelativeLayout>

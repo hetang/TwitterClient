@@ -1,6 +1,7 @@
 package com.air.twitterclient.adaptor;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.air.twitterclient.R;
+import com.air.twitterclient.activity.ProfileActivity;
 import com.air.twitterclient.models.Tweet;
 import com.squareup.picasso.Picasso;
 
@@ -20,14 +22,15 @@ import java.util.List;
  * Created by hetang on 2/22/15.
  */
 public class TweetArrayAdaptor extends ArrayAdapter<Tweet> {
-
+    private Context context;
     public TweetArrayAdaptor(Context context, List<Tweet> tweets) {
         super(context, android.R.layout.simple_list_item_1, tweets);
+        this.context = context;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Tweet tweet = getItem(position);
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final Tweet tweet = getItem(position);
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
@@ -54,6 +57,16 @@ public class TweetArrayAdaptor extends ArrayAdapter<Tweet> {
         viewHolder.txtBody.setText(Html.fromHtml(tweet.getBody()));
         viewHolder.txtTime.setText(tweet.getCreatedAt());
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageURL()).fit().placeholder(R.drawable.ic_loading).into(viewHolder.ivProfileImg);
+        final int currentPos = position;
+        viewHolder.ivProfileImg.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent profileIntent = new Intent(context, ProfileActivity.class);
+                profileIntent.putExtra("screen_name", tweet.getUser().getScreenName());
+                context.startActivity(profileIntent);
+            }
+        });
         return convertView;
     }
 

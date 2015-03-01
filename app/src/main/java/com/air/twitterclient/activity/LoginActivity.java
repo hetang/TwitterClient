@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.air.twitterclient.R;
 import com.air.twitterclient.rest.TwitterClient;

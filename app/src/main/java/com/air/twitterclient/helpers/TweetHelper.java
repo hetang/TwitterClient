@@ -2,21 +2,12 @@ package com.air.twitterclient.helpers;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.format.DateUtils;
-import android.util.Log;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.air.twitterclient.activity.TimeLineActivity;
 import com.air.twitterclient.adaptor.TweetArrayAdaptor;
 import com.air.twitterclient.handler.TweetJSONResponseHandler;
 import com.air.twitterclient.models.Tweet;
-import com.air.twitterclient.models.User;
 import com.air.twitterclient.rest.TwitterClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -115,5 +106,20 @@ public class TweetHelper {
     public void fetchNextUserTimeLines(int totalItemCount) {
         Tweet tweet = adaptor.getItem(totalItemCount-1);
         client.fetchNextUserTimeLineTweet(tweet.getUid(), new TweetJSONResponseHandler(adaptor, null, null));
+    }
+
+    public void populateSearchTimeLine(String query) {
+        if(pb != null) {
+            pb.setVisibility(ProgressBar.VISIBLE);
+        }
+        if(adaptor != null) {
+            adaptor.clear();
+        }
+        client.getSearchTimeLineTweets(query, new TweetJSONResponseHandler(adaptor, pb, swipeContainer));
+    }
+
+    public void fetchNextSearchTweets(String query, int totalItemCount) {
+        Tweet tweet = adaptor.getItem(totalItemCount-1);
+        client.fetchNextSearchTimeLineTweet(query, tweet.getUid(), new TweetJSONResponseHandler(adaptor, null, null));
     }
 }

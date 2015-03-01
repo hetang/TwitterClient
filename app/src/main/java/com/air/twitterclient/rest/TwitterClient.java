@@ -1,9 +1,5 @@
 package com.air.twitterclient.rest;
 
-import org.scribe.builder.api.Api;
-import org.scribe.builder.api.FlickrApi;
-import org.scribe.builder.api.TwitterApi;
-
 import android.content.Context;
 
 import com.air.twitterclient.handler.TweetJSONResponseHandler;
@@ -11,6 +7,12 @@ import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import org.scribe.builder.api.Api;
+import org.scribe.builder.api.TwitterApi;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /*
  * 
@@ -114,5 +116,31 @@ public class TwitterClient extends OAuthBaseClient {
         RequestParams param = new RequestParams();
         param.put("screen_name",screenName);
         getClient().get(apiURL, param,handler);
+    }
+
+    public void getSearchTimeLineTweets(String query, AsyncHttpResponseHandler handler) {
+        try {
+            String apiURL = getApiUrl("/search/tweets.json");
+            RequestParams param = new RequestParams();
+            param.put("q", URLEncoder.encode(query,"UTF-8"));
+            param.put("count", 25);
+            param.put("since_id", 1);
+            getClient().get(apiURL, param,handler);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void fetchNextSearchTimeLineTweet(String query, long uid, AsyncHttpResponseHandler handler) {
+        try {
+            String apiURL = getApiUrl("/search/tweets.json");
+            RequestParams param = new RequestParams();
+            param.put("q", URLEncoder.encode(query,"UTF-8"));
+            param.put("count", 25);
+            param.put("max_id", uid);
+            getClient().get(apiURL, param,handler);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }

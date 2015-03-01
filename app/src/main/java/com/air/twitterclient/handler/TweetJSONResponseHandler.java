@@ -3,9 +3,7 @@ package com.air.twitterclient.handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.air.twitterclient.activity.TimeLineActivity;
 import com.air.twitterclient.adaptor.TweetArrayAdaptor;
 import com.air.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;

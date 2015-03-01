@@ -13,5 +13,6 @@
     <string name="post_tweet">TWEET</string>
     <string name="user_profile">profile</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_search_time_line">SearchTimeLineActivity</string>
 
 </resources>

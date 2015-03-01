@@ -113,9 +113,9 @@ public class Tweet {
     public static Tweet fromJSON(JSONObject jsonObject) {
         Tweet tweet = new Tweet();
         try {
-            tweet.body = jsonObject.getString("text");
-            tweet.uid = jsonObject.getLong("id");
-            tweet.createdAt = TweetHelper.getRelativeTimeAgo(jsonObject.getString("created_at"));
+            tweet.body = jsonObject.optString("text");
+            tweet.uid = jsonObject.optLong("id",0);
+            tweet.createdAt = TweetHelper.getRelativeTimeAgo(jsonObject.optString("created_at"));
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
         } catch (JSONException e) {
             e.printStackTrace();

@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import com.air.twitterclient.R;
 import com.air.twitterclient.adaptor.TweetArrayAdaptor;
 import com.air.twitterclient.helpers.TweetHelper;
-import com.air.twitterclient.listners.EndlessHomeTweetScrollListener;
 import com.air.twitterclient.models.Tweet;
 
 import java.util.ArrayList;

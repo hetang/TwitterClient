@@ -9,23 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.air.twitterclient.helpers.TweetHelper;
-import com.air.twitterclient.listners.EndlessUserTimeLineTweetScrollListener;
+import com.air.twitterclient.listners.EndlessSearchTimeLineTweetScrollListener;
 import com.air.twitterclient.rest.TwitterApplication;
 import com.air.twitterclient.rest.TwitterClient;
 
 /**
- * Created by hetang on 2/28/15.
+ * Created by hetang on 2/27/15.
  */
-public class UserTimeLineFragment extends TweetListFragment{
-
+public class SearchTimeLineFragments extends TweetListFragment {
     private TwitterClient client;
     private TweetHelper helper;
-    private String screenName;
+    private String query;
 
-    public static UserTimeLineFragment newInstance(String screenName){
-        UserTimeLineFragment fragment = new UserTimeLineFragment();
+    public static SearchTimeLineFragments newInstance(String query){
+        SearchTimeLineFragments fragment = new SearchTimeLineFragments();
         Bundle args = new Bundle();
-        args.putString("screenName", screenName);
+        args.putString("query", query);
         fragment.setArguments(args);
         return fragment;
     }
@@ -38,7 +37,7 @@ public class UserTimeLineFragment extends TweetListFragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        screenName = getArguments().getString("screenName");
+        query = getArguments().getString("query");
         client = TwitterApplication.getRestClient();
         helper = new TweetHelper();
         helper.setClient(client);
@@ -48,14 +47,14 @@ public class UserTimeLineFragment extends TweetListFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, parent, savedInstanceState);
-        setupScrollListener(new EndlessUserTimeLineTweetScrollListener(helper));
+        setupScrollListener(new EndlessSearchTimeLineTweetScrollListener(helper,query));
         setupRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                helper.getUserTimeLines(screenName);
+                helper.populateSearchTimeLine(query);
             }
         });
-        helper.getUserTimeLines(screenName);
+        helper.populateSearchTimeLine(query);
         return v;
     }
 }
