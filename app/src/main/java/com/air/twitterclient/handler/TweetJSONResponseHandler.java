@@ -10,6 +10,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -42,7 +43,31 @@ public class TweetJSONResponseHandler extends JsonHttpResponseHandler {
     }
 
     @Override
+    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+        if(swipeContainer != null) {
+            swipeContainer.setRefreshing(false);
+        }
+        if(pb != null) {
+            pb.setVisibility(ProgressBar.INVISIBLE);
+        }
+        try {
+            JSONArray lists = response.getJSONArray("statuses");
+            List<Tweet> tweets = Tweet.fromJSONArray(lists);
+            adaptor.addAll(tweets);
+            Log.d("tweets = ", tweets.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+        if(swipeContainer != null) {
+            swipeContainer.setRefreshing(false);
+        }
+        if(pb != null) {
+            pb.setVisibility(ProgressBar.INVISIBLE);
+        }
         if(errorResponse != null) {
             Log.e("API Fail", errorResponse.toString(), throwable);
         }

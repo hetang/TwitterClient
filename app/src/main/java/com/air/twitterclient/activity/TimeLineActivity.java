@@ -1,17 +1,23 @@
 package com.air.twitterclient.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.air.twitterclient.R;
@@ -26,6 +32,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TimeLineActivity extends ActionBarActivity implements HomeTimeLineFragments.OnDataPass {
+    private String prevQuery;
+    private String currentQuery = "";
+
     private TextView mTitle;
     private User user;
     private TweetListFragment homeFragment;
@@ -58,9 +67,45 @@ public class TimeLineActivity extends ActionBarActivity implements HomeTimeLineF
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_time_line, menu);
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_time_line, menu);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        final Context self = this;
+        /*TextView textView = (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        textView.setTextColor(Color.WHITE);*/
+
+        searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
+                currentQuery = query;
+                prevQuery = query;
+                searchItem.collapseActionView();
+                Intent searchTimeLineIntent = new Intent(self, SearchTimeLineActivity.class);
+                searchTimeLineIntent.putExtra("query", currentQuery);
+                startActivity(searchTimeLineIntent);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        searchView.setOnSearchClickListener(new SearchView.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (prevQuery != null) {
+                    EditText searchText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+                    searchText.setText(prevQuery);
+                    searchText.setSelection(searchText.getText().length());
+                }
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
