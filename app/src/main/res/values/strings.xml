@@ -5,7 +5,7 @@
     <string name="title">Time Lines</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="login_label">Connect with Twitter</string>
+    <string name="login_label">Connect to Twitter</string>
     <string name="title_activity_time_line">TimeLineActivity</string>
     <string name="compose_tweet">Compose</string>
     <string name="title_activity_compose">ComposeActivity</string>
