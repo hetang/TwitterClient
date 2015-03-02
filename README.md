@@ -1,7 +1,7 @@
 # TwitterClient
 Creating Android App for Twitter Application.
 
-Time spent: 6 hours spent in total
+Time spent: 26 hours spent in total
 
 Completed user stories:
 
